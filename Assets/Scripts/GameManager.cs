@@ -9,8 +9,8 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;    //싱글톤
-    public Text Timetxt; 
-    public float time = 0.0f;
+    public Text Timetxt;
+    public Time TImeManager;
     public Card firstcard;
     public Card secondcard;
     public int cardCount = 0;
@@ -39,57 +39,19 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        Time.timeScale = 1.0f;
+        Time.timeScale = 0.0f;
         lastReshuffleTime = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        Timetxt.text = time.ToString("N2");
-
-
-
-        if (Card.instance.type == 0) // 카드프리팹 타입 0으로 엔진서 설정한 Card 싱글톤 변수 type 들고오기
+        if (Time.timeScale != 0.0f)
         {
-            if (time > 50f)
-            {
-                GameOver();
-            }
-        }
-        else if (Card.instance.type == 1)
-        {
-            if (time > 30f)
-            {
-                GameOver();
-            }
-        }
-        else if (Card.instance.type == 2)
-        {
-            if (time > 40f)
-            {
-                GameOver();
-            }
-            if (time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
+            if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
             {
                 StartCoroutine(ReshuffleRoutine());
-                lastReshuffleTime = time;
-                
-            }
-        }
-        else if (Card.instance.type == 3)
-        {
-            if (time > 150f)
-            {
-                GameOver();
-            }
-        }
-        else
-        {
-            if (time > 180f)
-            {
-                GameOver();
+                lastReshuffleTime = TimeManager.Instance.time;
             }
         }
     }
@@ -117,15 +79,12 @@ public class GameManager : MonoBehaviour
                 Invoke("RestoreCardCount", 10.0f+bonusDelay);
                 matchPairCount++; 
             }
-            else if(Card.instance.type == 1) // 스테이지2(type==1)용
+            else if (Card.instance.type == 1) // 스테이지2(type==1)용
             {
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
-                time -= 6f; // 맞추면 6초 감소시켜줌
-                if(time <0f)
-                {
-                    time = 0f;
-                }
+                TimeManager.Instance.time += 6f; // 맞추면 6초 증가
+
                successAlert.SetBool("isSuccessAlert", true); 
                 // anim 타입 successAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
                
@@ -159,7 +118,7 @@ public class GameManager : MonoBehaviour
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
-                time += 3f; // 짝 못맞추면 3초 증가
+                TimeManager.Instance.time -= 3f; // 짝 못맞추면 3초 감소
                 failAlert.SetBool("isFailAlert", true);
                 // anim 타입 failAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
 
@@ -247,7 +206,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-      
+
         yield return new WaitForSeconds(0.01f);
 
             
@@ -271,7 +230,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.01f);
 
         foreach (Card card in remainingCards)
         {
