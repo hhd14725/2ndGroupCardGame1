@@ -5,24 +5,25 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
+// 변수, 메서드용도 주석처리로 설명했습니다. 작업전 체크해주세요.
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;    //싱글톤
-    public Text Timetxt;
+    public Text Timetxt; 
     public float time = 0.0f;
     public Card firstcard;
     public Card secondcard;
     public int cardCount = 0;
-    public GameObject retryimage;
-    public Animator successAlert;
-    public Animator failAlert;
+    public GameObject retryimage; 
+    public Animator successAlert; // 스테이지2(type==1) 변수
+    public Animator failAlert;// 스테이지2(type==1) 변수
 
     AudioSource audioSource;
     public AudioClip clip;
-    private int matchPairCount = 0;
-    private float lastReshuffleTime = 0f; // 리셔플용 시간 체크 변수
+    private int matchPairCount = 0; // 스테이지1(type==0)용 변수, 짝이 맞춰졌는지 카운트 
+    private float lastReshuffleTime = 0f; // 스테이지3 (type==2) 용 변수, 리셔플용 시간 체크 변수
 
-    public bool isSuffling = false;
+    public bool isSuffling = false; 
 
     private void Awake()
     {
@@ -50,7 +51,7 @@ public class GameManager : MonoBehaviour
 
 
 
-        if (Card.instance.type == 0)
+        if (Card.instance.type == 0) // 카드프리팹 타입 0으로 엔진서 설정한 Card 싱글톤 변수 type 들고오기
         {
             if (time > 50f)
             {
@@ -97,16 +98,16 @@ public class GameManager : MonoBehaviour
     {
         if (firstcard.cardIndex == secondcard.cardIndex)
         {
-            //firstcard.DestroyCard();
+            //firstcard.DestroyCard(); //안써서 주석처리
             //secondcard.DestroyCard();
             cardCount -= 2;
-            if (Card.instance.type == 0)
+            if (Card.instance.type == 0) // 스테이지1(type==0)용
             {
                 float bonusDelay = matchPairCount * 0.5f; // 짝맞추기가 1회 성공할때마다 보너스 딜레이가 0.5초씩 증가해서 난이도 완화
                 float bonusDelay2 = matchPairCount * 0.5f;
                 firstcard.StartTurnBackCorutine(bonusDelay);
                 secondcard.StartTurnBackCorutine(bonusDelay);
-                CardFront front1 = firstcard.GetComponentInChildren<CardFront>();
+                CardFront front1 = firstcard.GetComponentInChildren<CardFront>(); //CardFront 는 Card에 있는 자식 오브젝트, CardFront.cs로 관리
                 CardFront front2 = secondcard.GetComponentInChildren<CardFront>();
                 if (front1 != null)
                     front1.StartTremBleFrontCard(bonusDelay2);
@@ -114,18 +115,19 @@ public class GameManager : MonoBehaviour
                     front2.StartTremBleFrontCard(bonusDelay2);
 
                 Invoke("RestoreCardCount", 10.0f+bonusDelay);
-                matchPairCount++;
+                matchPairCount++; 
             }
-            else if(Card.instance.type == 1)
+            else if(Card.instance.type == 1) // 스테이지2(type==1)용
             {
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
-                time -= 6f;
+                time -= 6f; // 맞추면 6초 감소시켜줌
                 if(time <0f)
                 {
                     time = 0f;
                 }
-               successAlert.SetBool("isSuccessAlert", true);
+               successAlert.SetBool("isSuccessAlert", true); 
+                // anim 타입 successAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
                
 
 
@@ -136,7 +138,7 @@ public class GameManager : MonoBehaviour
                 secondcard.DestroyCard();
             }
 
-            if (cardCount == 0)
+            if (cardCount == 0) // 카드 카운트가 0이 되어버리면, 게임클리어창으로 보냄
             {
                 StageResult();
             }
@@ -145,7 +147,7 @@ public class GameManager : MonoBehaviour
 
 
         }
-        else
+        else // 짝 못맞췄을경우
         {
             if(Card.instance.type == 0)
             {
@@ -157,9 +159,10 @@ public class GameManager : MonoBehaviour
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
-                time += 3f;
+                time += 3f; // 짝 못맞추면 3초 증가
                 failAlert.SetBool("isFailAlert", true);
-                
+                // anim 타입 failAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
+
             }
             else
             {
@@ -170,12 +173,12 @@ public class GameManager : MonoBehaviour
             
            
         }
-        firstcard = null;
-        secondcard = null;
+        firstcard = null; // 첫번째 카드 초기화
+        secondcard = null; // 두번째 카드 초기화
     }
 
 
-    private void RestoreCardCount()
+    private void RestoreCardCount() // stage1(cad type==0)의 카드 카운트 복구메서드 
     {
         cardCount += 2;
     }
@@ -213,7 +216,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private IEnumerator ReshuffleRoutine()
+    private IEnumerator ReshuffleRoutine() // 스테이지3(type==2) 리셔플 코루틴
     {
         if (firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
         {
@@ -230,8 +233,8 @@ public class GameManager : MonoBehaviour
         //shuffleMessageUI.SetActive(true);
 
         isSuffling = true;
-        Card[] allCards = Object.FindObjectsByType<Card>(FindObjectsSortMode.None); // 버전확인 2023 이후버전
-        Card[] remainingCards = allCards.Where(card => card != null).ToArray(); // 파괴된 카드 제외후 배열에 다시 담기
+        Card[] allCards = Object.FindObjectsByType<Card>(FindObjectsSortMode.None); // allCards는 현재씬에있는 모든 Card 타입을 찾아서 배열로 반환
+        Card[] remainingCards = allCards.Where(card => card != null).ToArray(); // 파괴된 카드혹은 지정안된 카드 제외후 배열에 다시 담기
 
 
         foreach (Card card in remainingCards)

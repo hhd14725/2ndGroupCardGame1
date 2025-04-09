@@ -9,7 +9,7 @@ public class Card : MonoBehaviour
     public GameObject front;
     public GameObject back;
     public Animator anim;
-    public int slotIndex; // 보드에서 할당된 고유 슬롯 인덱스 (0 ~ 15), 리셔플때 남은 카드 위치 확인용
+    public int slotIndex; // stage3(type==2)의 보드에서 할당된 고유 슬롯 인덱스 (0 ~ 15), 리셔플때 남은 카드 위치 확인용
 
 
     public SpriteRenderer frontimage;
@@ -20,7 +20,7 @@ public class Card : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    private void Awake()
+    private void Awake() // startscene에서 Card 프리팹 생성시에 start보다 먼저 생성해서 null이안되도록 
     {
         
         if (instance == null)
@@ -44,7 +44,7 @@ public class Card : MonoBehaviour
         
     }
 
-    public void Setting(int number)
+    public void Setting(int number) // Card 프리팹별로 type을 구분해서 resources의 인덱스를 구분하여 넣어주는 메서드
     {
         if(type==0)
         {
@@ -76,7 +76,7 @@ public class Card : MonoBehaviour
 
 
 
-        //board에서 생성되는 card 프리팹 16장에게 리소스 폴더내의 Jin00 ~ Jin07 이름의 8개의 이미지를 순서대로 부여, 난수가아님
+        
 
 
 
