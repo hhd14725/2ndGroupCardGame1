@@ -84,13 +84,12 @@ public class Card : MonoBehaviour
 
     public void OpenCard()
     {
-        GameManager.instance.successAlert.SetBool("isSuccessAlert", false); // stage2 에서 성공 알림이 뜨지 않도록, 모든 스테이지에서도 초기화
-        GameManager.instance.failAlert.SetBool("isFailAlert", false); // stage2 에서 실패 알림이 뜨지 않도록, 모든 스테이지에서도 초기화
+        
 
-        if(GameManager.instance.isSuffling)
-        {
-            return;
-        }
+        //if(GameManager.instance.isSuffling) // 리셔플 구버전
+        //{
+            //return;
+       // }
 
         audioSource.PlayOneShot(clip);
         anim.SetBool("IsOpen", true);

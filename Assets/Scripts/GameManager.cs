@@ -15,15 +15,14 @@ public class GameManager : MonoBehaviour
     public Card secondcard;
     public int cardCount = 0;
     public GameObject retryimage; 
-    public Animator successAlert; // 스테이지2(type==1) 변수
-    public Animator failAlert;// 스테이지2(type==1) 변수
+
 
     AudioSource audioSource;
     public AudioClip clip;
     private int matchPairCount = 0; // 스테이지1(type==0)용 변수, 짝이 맞춰졌는지 카운트 
-    private float lastReshuffleTime = 0f; // 스테이지3 (type==2) 용 변수, 리셔플용 시간 체크 변수
+    //private float lastReshuffleTime = 0f; // 스테이지3 (type==2) 용 변수, 리셔플용 시간 체크 변수 , 리셔플 구버전
 
-    public bool isSuffling = false; 
+    //public bool isSuffling = false;  // 리셔플 구버전
 
     private void Awake()
     {
@@ -40,20 +39,20 @@ public class GameManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         Time.timeScale = 0.0f;
-        lastReshuffleTime = 0f;
+      //lastReshuffleTime = 0f;//구버전 셔플
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.timeScale != 0.0f)
-        {
-            if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
-            {
-                StartCoroutine(ReshuffleRoutine());
-                lastReshuffleTime = TimeManager.Instance.time;
-            }
-        }
+       // if (Time.timeScale != 0.0f) // 리셔플 구버전
+       // {
+           // if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
+            //{
+                //StartCoroutine(ReshuffleRoutine());
+                //lastReshuffleTime = TimeManager.Instance.time;
+           // }
+       // }
     }
 
     public void Matched()
@@ -83,13 +82,7 @@ public class GameManager : MonoBehaviour
             {
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
-                TimeManager.Instance.time += 6f; // 맞추면 6초 증가
-
-               successAlert.SetBool("isSuccessAlert", true); 
-                // anim 타입 successAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
                
-
-
             }
             else
             {
@@ -118,9 +111,7 @@ public class GameManager : MonoBehaviour
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
-                TimeManager.Instance.time -= 3f; // 짝 못맞추면 3초 감소
-                failAlert.SetBool("isFailAlert", true);
-                // anim 타입 failAlert변수의 경우 엔진상에 animator controller에서 만든 bool 프로퍼티로 조종
+                
 
             }
             else
@@ -175,74 +166,77 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private IEnumerator ReshuffleRoutine() // 스테이지3(type==2) 리셔플 코루틴
-    {
-        if (firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
-        {
-            firstcard.CloseCardInvoke();
-            firstcard = null;
-        }
-        if (secondcard != null)
-        {
-            secondcard.CloseCardInvoke();
-            secondcard = null;
-        }
+
+
+
+   // private IEnumerator ReshuffleRoutine() // 스테이지3(type==2) 리셔플 코루틴 구버전 셔플
+   // {
+   //     if (firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
+   //    {
+   //         firstcard.CloseCardInvoke();
+   //         firstcard = null;
+   //     }
+   //     if (secondcard != null)
+   //     {
+   //         secondcard.CloseCardInvoke();
+   //         secondcard = null;
+   //     }
 
         //if (shuffleMessageUI != null)
         //shuffleMessageUI.SetActive(true);
 
-        isSuffling = true;
-        Card[] allCards = Object.FindObjectsByType<Card>(FindObjectsSortMode.None); // allCards는 현재씬에있는 모든 Card 타입을 찾아서 배열로 반환
-        Card[] remainingCards = allCards.Where(card => card != null).ToArray(); // 파괴된 카드혹은 지정안된 카드 제외후 배열에 다시 담기
+    //    isSuffling = true;
+    //    Card[] allCards = Object.FindObjectsByType<Card>(FindObjectsSortMode.None); // allCards는 현재씬에있는 모든 Card 타입을 찾아서 배열로 반환
+    //    Card[] remainingCards = allCards.Where(card => card != null).ToArray(); // 파괴된 카드혹은 지정안된 카드 제외후 배열에 다시 담기
 
 
-        foreach (Card card in remainingCards)
-        {
-            if (card != null)
-            {
-                card.anim.SetBool("IsOpen", true);
-                card.front.SetActive(true);
-                card.back.SetActive(false);
-            }
-        }
+    //    foreach (Card card in remainingCards)
+    //    {
+    //        if (card != null)
+    //        {
+    //            card.anim.SetBool("IsOpen", true);
+    //            card.front.SetActive(true);
+    //            card.back.SetActive(false);
+    //        }
+    //    }
 
 
-        yield return new WaitForSeconds(0.01f);
+    //    yield return new WaitForSeconds(0.01f);
 
             
-        List<Vector2> availablePositions = new List<Vector2>();
-        foreach (Card card in remainingCards)
-        {
+    //    List<Vector2> availablePositions = new List<Vector2>();
+    //    foreach (Card card in remainingCards)
+    //    {
            
-            Vector2 pos = new Vector2((card.slotIndex % 4) * 1.4f - 2.1f,
-                                      (card.slotIndex / 4) * 1.4f - 3.6f);
-            availablePositions.Add(pos);
-        }
+    //        Vector2 pos = new Vector2((card.slotIndex % 4) * 1.4f - 2.1f,
+    //                                  (card.slotIndex / 4) * 1.4f - 3.6f);
+    //        availablePositions.Add(pos);
+    //    }
    
-        availablePositions = availablePositions.OrderBy(p => Random.value).ToList();
+    //  availablePositions = availablePositions.OrderBy(p => Random.value).ToList();
 
-        for (int i = 0; i < remainingCards.Length; i++)
-        {
-            if (remainingCards[i] != null && remainingCards[i].gameObject != null)
-            {
-                remainingCards[i].transform.position = availablePositions[i];
+    //    for (int i = 0; i < remainingCards.Length; i++)
+    //    {
+    //        if (remainingCards[i] != null && remainingCards[i].gameObject != null)
+    //      {
+    //          remainingCards[i].transform.position = availablePositions[i];
 
-            }
-        }
+    //      }
+    //  }
 
-        yield return new WaitForSeconds(0.01f);
+    //  yield return new WaitForSeconds(0.01f);
 
-        foreach (Card card in remainingCards)
-        {
-            if (card != null)
-                card.CloseCardInvoke();
-        }
+    //  foreach (Card card in remainingCards)
+    //  {
+    //      if (card != null)
+    //          card.CloseCardInvoke();
+    //  }
 
         //if (shuffleMessageUI != null)
         // shuffleMessageUI.SetActive(false);
-        isSuffling = false;
+    //  isSuffling = false;
 
-        yield break;
-    }
+    //  yield break;
+  //}
 
 }

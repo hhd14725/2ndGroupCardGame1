@@ -894,7 +894,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD2B9\uC218\uB8F0 : \uB0A8\uC740 \uCE74\uB4DC 5\uCD08\uB9C8\uB2E4 \uC154\uD50C"
+  m_Text: "\uD2B9\uC218\uB8F0 : "
 --- !u!222 &680651490
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1057,8 +1057,6 @@ MonoBehaviour:
   secondcard: {fileID: 0}
   cardCount: 0
   retryimage: {fileID: 2063857483}
-  successAlert: {fileID: 1212823159}
-  failAlert: {fileID: 1723700135}
   clip: {fileID: 8300000, guid: a3ba46a2d9b05454d8692f0ed75304d3, type: 3}
   isSuffling: 0
 --- !u!82 &804614924

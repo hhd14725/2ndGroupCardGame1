@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 804614923}
-  time: 30
+  time: 40
   Timetxt: {fileID: 1690443072}
 --- !u!4 &2112591014
 Transform:
