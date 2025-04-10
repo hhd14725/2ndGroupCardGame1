@@ -98,6 +98,7 @@ public class Card : MonoBehaviour
         // }
         if (Time.timeScale > 0.0f)
         {
+            GameManager.instance.turn -= 0.5f;
 
             audioSource.PlayOneShot(clip);
             anim.SetBool("IsOpen", true);

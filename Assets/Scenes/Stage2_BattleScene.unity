@@ -842,7 +842,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uD2B9\uC218\uB8F0 : "
+  m_Text: "\uD2B9\uC218\uB8F0 :  \uBC18\uCABD\uC9DC\uB9AC \uC0AC\uC9C4\uC744 \uB9DE\uCD94\uC790.\n\uD134
+    \uC218 \uC81C\uD55C 20"
 --- !u!222 &680651490
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -884,6 +885,8 @@ MonoBehaviour:
   time: 30
   Timetxt: {fileID: 1690443072}
   passedTime: 0
+  shiftInterval: 5
+  restoreInterval: 20
 --- !u!4 &719183052
 Transform:
   m_ObjectHideFlags: 0
