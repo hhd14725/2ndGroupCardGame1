@@ -1423,7 +1423,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uCC3D\uBBFC"
+  m_Text: "\uAD50\uC778"
 --- !u!222 &1132817498
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1502,7 +1502,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uAD50\uC778"
+  m_Text: "\uCC3D\uBBFC"
 --- !u!222 &1270757443
 CanvasRenderer:
   m_ObjectHideFlags: 0
