@@ -286,7 +286,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e4ea590b1a6ff7a4aa1de81ee9452d6a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ce41c6e2672ee6d41aa14fec817a4c55, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -442,9 +442,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC774\uB984: \n\uB098\uC774: \nMBTI: \n\uAC1C\uBC1C\uC790\uACBD\uD5D8
-    X\n\uC778\uC0DD\uAC8C\uC784: \n\uCDE8\uBBF8: \n\uC88B\uC544\uD558\uB294\uC74C\uC2DD:
-    \n\n"
+  m_Text: "\uC774\uB984: \uC2EC\uAD50\uC778\n\uB098\uC774: \uC591\uB760/\uC591\uC790\uB9AC\nMBTI:
+    ENTP\n\uAC1C\uBC1C\uC790\uACBD\uD5D8 X\n\uC778\uC0DD\uAC8C\uC784: \uCCA0\uAD8C7\n\uCDE8\uBBF8:
+    \uB09A\uC2DC\n\uD558\uC580 \uAC1C\uB97C \uD0A4\uC6C0\n\n"
 --- !u!222 &1291072460
 CanvasRenderer:
   m_ObjectHideFlags: 0
