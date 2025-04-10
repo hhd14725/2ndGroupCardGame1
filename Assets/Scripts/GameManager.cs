@@ -16,8 +16,10 @@ public class GameManager : MonoBehaviour
     public Card firstcard;
     public Card secondcard;
     public int cardCount = 0;
-    public GameObject retryimage;
+
     public GameObject shuffleImage;
+    public GameObject endPanel; 
+
 
     AudioSource audioSource;
     public AudioClip clip;
@@ -185,7 +187,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         //게임오버 UI 활성화
-        retryimage.SetActive(true);
+        endPanel.SetActive(true);
     }
 
     public void StageResult()
