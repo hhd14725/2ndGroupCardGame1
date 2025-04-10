@@ -14,6 +14,9 @@ public class TimeManager : MonoBehaviour
     public Text Timetxt;
 
     public float passedTime = 0.0f;
+    public float limitTime = 30f;     // 제한 시간 스테이지4
+    public float shiftInterval = 5f;  // 카드 이동 간격 스테이지4
+    private float shiftTimer;         // 카드 이동 타이머 스테이지4
 
     private void Awake()
     {
@@ -59,6 +62,22 @@ public class TimeManager : MonoBehaviour
                 Debug.Log("셔플");
             }
         }
+        if (Card.instance.type == 3)
+        {
+            if (time <= 0f)
+            {
+                time = 0f;
+                RestoreAllCards(); // 전체 초기화
+            }
+
+            // 정해진 시간마다 카드 위치 이동
+            if (shiftTimer <= 0f)
+            {
+                shiftTimer = shiftInterval;
+                Board.ShiftCardPositions(); // 카드 밀기
+            }
+        }
+
     }
 
     public void plusTime()
@@ -73,5 +92,20 @@ public class TimeManager : MonoBehaviour
         time -= 2.0f;
         GameManager.instance.minusText = Instantiate(GameManager.instance.minus, GameManager.instance.canvas.transform);
         Destroy(GameManager.instance.minusText.gameObject, 1f);
+    }
+    void RestoreAllCards()
+    {
+        foreach (Card c in Board.allCards)
+        {
+            c.gameObject.SetActive(true); // 비활성화된 카드도 다시 보여줌
+            c.CloseCard();                // 카드 닫기
+        }
+
+        // 상태 초기화
+        GameManager.instance.cardCount = Board.allCards.Count;
+        time =limitTime;
+        shiftTimer = shiftInterval;
+
+
     }
 }

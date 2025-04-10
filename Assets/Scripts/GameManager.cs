@@ -118,11 +118,24 @@ public class GameManager : MonoBehaviour
                     matchPairCount++;
                 }
 
-                else if (Card.instance.type == 2) //스테이지3(type==3)용
+                else if (Card.instance.type == 2) //스테이지3(type==2)용
                 {
                     firstcard.DestroyCard();
                     secondcard.DestroyCard();
                 }
+
+                else if (Card.instance.type == 3)//스테이지4(type==3)용
+                {
+                    firstcard.DestroyCard();
+                    secondcard.DestroyCard();
+                   
+                }
+
+                   
+
+
+
+
                 else if (Card.instance.type == 4) // 스테이지5(type==4)용
                 {
                     TimeManager.Instance.plusTime();
@@ -143,7 +156,7 @@ public class GameManager : MonoBehaviour
                     firstcard.DestroyCard();
                     secondcard.DestroyCard();
 
-                 
+
                 }
                 audioSource.PlayOneShot(clip);
             }
@@ -160,6 +173,11 @@ public class GameManager : MonoBehaviour
                 {
                     firstcard.CloseCard();
                     secondcard.BlindCard();
+                }
+                else if (Card.instance.type == 3)
+                {
+                    firstcard.CloseCard();
+                    secondcard.CloseCard();
                 }
                 else if (Card.instance.type == 4)
                 {
@@ -289,6 +307,7 @@ public class GameManager : MonoBehaviour
         shuffleImage.SetActive(false);
     }
 
+    
 
 
 

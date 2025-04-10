@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 public class Board : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class Board : MonoBehaviour
     public GameObject Card;
 
     public int[] randomArr;
+
+    public static List<Card> allCards = new List<Card>();
+    public static bool isShifting = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -56,5 +60,33 @@ public class Board : MonoBehaviour
     void Update()
     {
         
+    }
+    public static void ShiftCardPositions()
+    {
+        // 현재 활성화된 카드만 필터링
+        List<Card> visibleCards = allCards.FindAll(c => c.gameObject.activeInHierarchy);
+        if (visibleCards.Count <= 1) return;
+
+        isShifting = true; // 이동 중 상태 설정
+
+        // 마지막 카드 위치 저장
+        Vector3 lastPos = visibleCards[visibleCards.Count - 1].transform.position;
+
+        // 뒤에서부터 한 칸씩 앞 카드 위치로 이동
+        for (int i = visibleCards.Count - 1; i > 0; i--)
+        {
+            visibleCards[i].transform.position = visibleCards[i - 1].transform.position;
+
+            // 이동 중 카드 강제로 열었다 닫기 (이펙트용?)
+            visibleCards[i].ForceOpen();
+            visibleCards[i].Invoke("CloseCard", 0.01f);
+        }
+
+        // 첫 번째 카드를 마지막 위치로 이동
+        visibleCards[0].transform.position = lastPos;
+        visibleCards[0].ForceOpen();
+        visibleCards[0].Invoke("CloseCard", 0.01f);
+
+        isShifting = false; // 이동 끝 상태로 변경
     }
 }

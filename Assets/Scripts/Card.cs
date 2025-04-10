@@ -89,7 +89,7 @@ public class Card : MonoBehaviour
     public void OpenCard()
     {
 
-
+        if(Board.isShifting) return;
         //if(GameManager.instance.isSuffling) // 리셔플 구버전
         //{
         //return;
@@ -115,7 +115,8 @@ public class Card : MonoBehaviour
                 GameManager.instance.Matched();
 
             }
-        }  
+        }
+        
     }
 
     public void CloseCard()
@@ -186,11 +187,17 @@ public class Card : MonoBehaviour
         back.SetActive(true);
         blind.SetActive(false);
     }
-    
 
+    public void ForceOpen()
+    {
+        anim.SetBool("isOpen", true);
+        front.SetActive(true);
+        back.SetActive(false);
+    }
 
 
 
 
 
 }
+s
