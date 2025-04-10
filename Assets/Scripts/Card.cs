@@ -55,10 +55,12 @@ public class Card : MonoBehaviour
         else if(type == 1)
         {
             cardIndex = number;
-            frontimage.sprite = Resources.Load<Sprite>($"chang{cardIndex}");
+            frontimage.sprite = Resources.Load<Sprite>($"Chang{cardIndex}"); 
 
             GameManager.instance.turn -= 17.5f;
             TimeManager.Instance.time += 50f;
+
+
         }
         else if (type == 2)
         {
@@ -89,7 +91,7 @@ public class Card : MonoBehaviour
     public void OpenCard()
     {
 
-        if(Board.isShifting) return;
+
         //if(GameManager.instance.isSuffling) // 리셔플 구버전
         //{
         //return;
@@ -99,8 +101,6 @@ public class Card : MonoBehaviour
 
             audioSource.PlayOneShot(clip);
             anim.SetBool("IsOpen", true);
-
-            GameManager.instance.turn -= 0.5f;
 
             front.SetActive(true);
             back.SetActive(false);
@@ -114,9 +114,10 @@ public class Card : MonoBehaviour
                 GameManager.instance.secondcard = this;
                 GameManager.instance.Matched();
 
+
             }
+
         }
-        
     }
 
     public void CloseCard()
@@ -164,6 +165,7 @@ public class Card : MonoBehaviour
 
     public void DestroyCard()
     {
+        Board.allCards.Remove(this);
         Invoke("DestroyCardInvoke", 0.5f);
     }
     public void DestroyCardInvoke()
@@ -176,6 +178,12 @@ public class Card : MonoBehaviour
         StartCoroutine(BlindCoroutine());
         front.SetActive(false);
     }
+    public void ForceOpen()
+    {
+        anim.SetBool("IsOpen", true);
+        front.SetActive(true);
+        back.SetActive(false);
+    }
 
     private IEnumerator BlindCoroutine() //Invoke의 반대 역할 (설정시간 이후 작동X, 설정시간 이후 비작동O)
     { 
@@ -187,17 +195,11 @@ public class Card : MonoBehaviour
         back.SetActive(true);
         blind.SetActive(false);
     }
+    
 
-    public void ForceOpen()
-    {
-        anim.SetBool("isOpen", true);
-        front.SetActive(true);
-        back.SetActive(false);
-    }
 
 
 
 
 
 }
-s

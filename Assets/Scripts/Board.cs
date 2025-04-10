@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Board : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class Board : MonoBehaviour
 
             GameManager.instance.cardCount = arr1.Length;
         }
+     
         else
         {
             int[] arr = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
@@ -50,6 +52,8 @@ public class Board : MonoBehaviour
                 Go.transform.position = new Vector2(x, y);
                 Go.GetComponent<Card>().Setting(arr[i]);
                 Go.GetComponent<Card>().slotIndex = i;
+
+                Board.allCards.Add(Go.GetComponent<Card>());
             }
             GameManager.instance.cardCount = arr.Length;
         }
@@ -79,14 +83,15 @@ public class Board : MonoBehaviour
 
             // 이동 중 카드 강제로 열었다 닫기 (이펙트용?)
             visibleCards[i].ForceOpen();
-            visibleCards[i].Invoke("CloseCard", 0.01f);
+            visibleCards[i].Invoke("CloseCardInvoke", 0.1f);
         }
 
         // 첫 번째 카드를 마지막 위치로 이동
         visibleCards[0].transform.position = lastPos;
         visibleCards[0].ForceOpen();
-        visibleCards[0].Invoke("CloseCard", 0.01f);
+        visibleCards[0].Invoke("CloseCardInvoke", 0.1f);
 
         isShifting = false; // 이동 끝 상태로 변경
     }
+  
 }
