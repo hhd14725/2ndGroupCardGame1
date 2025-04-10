@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public int cardCount = 0;
 
     public GameObject shuffleImage;
-    public GameObject endPanel; 
+    public GameObject endPanel;
 
 
     AudioSource audioSource;
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-       
+
     }
 
 
@@ -102,14 +102,19 @@ public class GameManager : MonoBehaviour
                 if (front2 != null)
                     front2.StartTremBleFrontCard(bonusDelay2);
 
-                Invoke("RestoreCardCount", 10.0f+bonusDelay);
-                matchPairCount++; 
+                Invoke("RestoreCardCount", 10.0f + bonusDelay);
+                matchPairCount++;
             }
             else if (Card.instance.type == 1) // 스테이지2(type==1)용
             {
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
-               
+
+            }
+            else if (Card.instance.type == 2) //스테이지3(type==3)용
+            {
+                firstcard.DestroyCard();
+                secondcard.DestroyCard();
             }
             else if (Card.instance.type == 4) // 스테이지5(type==4)용
             {
@@ -137,24 +142,27 @@ public class GameManager : MonoBehaviour
                 StageResult();
             }
             audioSource.PlayOneShot(clip);
-            
+
 
 
         }
         else // 짝 못맞췄을경우
         {
-            if(Card.instance.type == 0)
+            if (Card.instance.type == 0)
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
             }
 
-            else if(Card.instance.type == 1)
+            else if (Card.instance.type == 1)
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
-                
-
+            }
+            else if (Card.instance.type == 2)
+            {
+                firstcard.CloseCard();
+                secondcard.BlindCard();
             }
             else if (Card.instance.type == 4)
             {
@@ -170,8 +178,8 @@ public class GameManager : MonoBehaviour
                 firstcard.CloseCard();
                 secondcard.CloseCard();
             }
-            
-           
+
+
         }
         firstcard = null; // 첫번째 카드 초기화
         secondcard = null; // 두번째 카드 초기화
@@ -193,11 +201,11 @@ public class GameManager : MonoBehaviour
     public void StageResult()
     {
         StageClearData.stageClear[Card.instance.type] = true;
-        if(Card.instance.type == 0)
-        { 
-            SceneManager.LoadScene("Stage1_ResultScene"); 
+        if (Card.instance.type == 0)
+        {
+            SceneManager.LoadScene("Stage1_ResultScene");
         }
-        else if(Card.instance.type == 1)
+        else if (Card.instance.type == 1)
         {
             SceneManager.LoadScene("Stage2_ResultScene");
         }

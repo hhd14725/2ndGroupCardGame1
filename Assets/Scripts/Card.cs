@@ -8,6 +8,7 @@ public class Card : MonoBehaviour
     public static Card instance;
     public GameObject front;
     public GameObject back;
+    public GameObject blind;
     public Animator anim;
     public int slotIndex; // stage3(type==2)의 보드에서 할당된 고유 슬롯 인덱스 (0 ~ 15), 리셔플때 남은 카드 위치 확인용
 
@@ -149,9 +150,9 @@ public class Card : MonoBehaviour
         back.SetActive(true);
         
     }
-
-
-
+    
+    // 스위치문으로 씬이름을 참고하여 frontimage.sprite = Resources.Load<Sprite>($"Jin{cardIndex}"); 의 Jin이라는 string 리터럴을 case별로 바꾸게
+    //하여 Setting함수에서 if 조건문에 따라 Resources 폴더의 Jin0~Jin7, Back0~Back7 을 Scene별로 다르게 부여.
 
 
     public void DestroyCard()
@@ -163,12 +164,25 @@ public class Card : MonoBehaviour
        Destroy(this.gameObject);
     }
 
-    // 스위치문으로 씬이름을 참고하여 frontimage.sprite = Resources.Load<Sprite>($"Jin{cardIndex}"); 의 Jin이라는 string 리터럴을 case별로 바꾸게
-    //하여 Setting함수에서 if 조건문에 따라 Resources 폴더의 Jin0~Jin7, Back0~Back7 을 Scene별로 다르게 부여.
+    public void BlindCard() //Stage 3 
+    {
+        StartCoroutine(BlindCoroutine());
+        front.SetActive(false);
+    }
 
-   
+    private IEnumerator BlindCoroutine() //Invoke의 반대 역할 (설정시간 이후 작동X, 설정시간 이후 비작동O)
+    { 
+        blind.SetActive(true);
+        back.SetActive(false);
 
-  
+        yield return new WaitForSeconds(0.5f);
+
+        back.SetActive(true);
+        blind.SetActive(false);
+    }
+    
+
+
 
 
 
