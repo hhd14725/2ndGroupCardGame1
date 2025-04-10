@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         TurnTxt.text = turn.ToString("N0");
-        if (turn <= 0)
+        if (turn < 0)
         {
             Time.timeScale = 0.0f;
             endPanel.SetActive(true);
@@ -194,6 +194,8 @@ public class GameManager : MonoBehaviour
         {
             if (firstcard.cardIndex + secondcard.cardIndex == 15f)
             {
+                cardCount -= 2;
+
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
 
