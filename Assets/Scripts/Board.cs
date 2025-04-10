@@ -78,7 +78,7 @@ public class Board : MonoBehaviour
             GameManager.instance.secondcard = null;
         }
         // 현재 활성화된 카드만 필터링
-        List<Card> visibleCards = allCards.FindAll(c => c.gameObject.activeInHierarchy);
+        List<Card> visibleCards = allCards.FindAll(c => c != null && c.gameObject != null && c.gameObject.activeInHierarchy);
         if (visibleCards.Count <= 1) return;
 
         isShifting = true; // 이동 중 상태 설정
@@ -93,13 +93,13 @@ public class Board : MonoBehaviour
 
             // 이동 중 카드 강제로 열었다 닫기 (이펙트용?)
             visibleCards[i].ForceOpen();
-            visibleCards[i].Invoke("CloseCardInvoke", 0.1f);
+            visibleCards[i].Invoke("CloseCardInvoke", 0.5f);
         }
 
         // 첫 번째 카드를 마지막 위치로 이동
         visibleCards[0].transform.position = lastPos;
         visibleCards[0].ForceOpen();
-        visibleCards[0].Invoke("CloseCardInvoke", 0.1f);
+        visibleCards[0].Invoke("CloseCardInvoke", 0.5f);
 
         isShifting = false; // 이동 끝 상태로 변경
     }

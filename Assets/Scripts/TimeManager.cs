@@ -14,9 +14,12 @@ public class TimeManager : MonoBehaviour
     public Text Timetxt;
 
     public float passedTime = 0.0f;
-    public float limitTime = 30f;     // 제한 시간 스테이지4
     public float shiftInterval = 5f;  // 카드 이동 간격 스테이지4
     private float shiftTimer;         // 카드 이동 타이머 스테이지4
+
+    public float restoreInterval = 20f;   // 카드 복구 간격 (예: 20초)
+    private float restoreTimer;           // 복구 타이머
+
 
     private void Awake()
     {
@@ -29,6 +32,8 @@ public class TimeManager : MonoBehaviour
      void Start()
     {
         Time.timeScale = 0.0f; //StartButton이 값을 1.0f로 바꿔준다
+        shiftTimer = shiftInterval;
+        restoreTimer = restoreInterval;
     }
 
     // Update is called once per frame
@@ -45,7 +50,7 @@ public class TimeManager : MonoBehaviour
             if (time < 0)
             {
                 time = 0;
-
+               
                 GameManager.instance.GameOver();
             }
 
@@ -68,14 +73,21 @@ public class TimeManager : MonoBehaviour
             if (time <= 0f)
             {
                 time = 0f;
-                RestoreAllCards(); // 전체 초기화
+               // RestoreAllCards(); // 전체 초기화
             }
             shiftTimer -= Time.deltaTime;
             // 정해진 시간마다 카드 위치 이동
             if (shiftTimer <= 0f)
             {
                 shiftTimer = shiftInterval;
+ 
                 Board.ShiftCardPositions(); // 카드 밀기
+            }
+            restoreTimer -= Time.deltaTime;
+            if (restoreTimer <= 0f)
+            {
+                RestoreAllCards();
+                restoreTimer = restoreInterval;
             }
         }
 
@@ -98,15 +110,19 @@ public class TimeManager : MonoBehaviour
     {
         foreach (Card c in Board.allCards)
         {
-            c.gameObject.SetActive(true); // 비활성화된 카드도 다시 보여줌
-            c.CloseCard();                // 카드 닫기
+            if (c != null && !c.gameObject.activeInHierarchy)
+            {
+                c.gameObject.SetActive(true); // 비활성화된 카드도 다시 보여줌
+                c.CloseCard();                // 카드 닫기
+            }
+               
         }
 
         // 상태 초기화
         GameManager.instance.cardCount = Board.allCards.Count;
-        time =limitTime;
+       
         shiftTimer = shiftInterval;
-
+        restoreTimer = restoreInterval;
 
     }
 }

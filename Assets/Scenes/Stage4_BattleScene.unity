@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 804614923}
-  time: 50
+  time: 30
   Timetxt: {fileID: 1690443072}
   passedTime: 0
   limitTime: 30

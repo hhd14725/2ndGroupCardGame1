@@ -159,15 +159,28 @@ public class Card : MonoBehaviour
         
     }
     
-    // 스위치문으로 씬이름을 참고하여 frontimage.sprite = Resources.Load<Sprite>($"Jin{cardIndex}"); 의 Jin이라는 string 리터럴을 case별로 바꾸게
-    //하여 Setting함수에서 if 조건문에 따라 Resources 폴더의 Jin0~Jin7, Back0~Back7 을 Scene별로 다르게 부여.
 
 
     public void DestroyCard()
     {
-        Board.allCards.Remove(this);
-        Invoke("DestroyCardInvoke", 0.5f);
+
+
+        if (Card.instance.type == 3)
+        {
+            Invoke("HideCard", 0.5f);
+        }
+        else
+        {
+            Invoke("DestroyCardInvoke", 0.5f);
+        }
+
     }
+
+    public void HideCard()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void DestroyCardInvoke()
     {
        Destroy(this.gameObject);
