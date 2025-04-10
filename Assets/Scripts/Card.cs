@@ -85,31 +85,32 @@ public class Card : MonoBehaviour
 
     public void OpenCard()
     {
-        
+
 
         //if(GameManager.instance.isSuffling) // 리셔플 구버전
         //{
-            //return;
-       // }
-
-        audioSource.PlayOneShot(clip);
-        anim.SetBool("IsOpen", true);
-        
-        front.SetActive(true);
-        back.SetActive(false);
-        if (GameManager.instance.firstcard == null)
+        //return;
+        // }
+        if (Time.timeScale > 0.0f)
         {
-            GameManager.instance.firstcard = this;
-            
-        }
-        else
-        {
-            GameManager.instance.secondcard = this;
-            GameManager.instance.Matched();
-            
 
-        }
+            audioSource.PlayOneShot(clip);
+            anim.SetBool("IsOpen", true);
 
+            front.SetActive(true);
+            back.SetActive(false);
+            if (GameManager.instance.firstcard == null)
+            {
+                GameManager.instance.firstcard = this;
+
+            }
+            else
+            {
+                GameManager.instance.secondcard = this;
+                GameManager.instance.Matched();
+
+            }
+        }  
     }
 
     public void CloseCard()
