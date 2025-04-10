@@ -67,6 +67,16 @@ public class Board : MonoBehaviour
     }
     public static void ShiftCardPositions()
     {
+        if (GameManager.instance.firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
+        {
+            GameManager.instance.firstcard.CloseCardInvoke();
+            GameManager.instance.firstcard = null;
+        }
+        if (GameManager.instance.secondcard != null)
+        {
+            GameManager.instance.secondcard.CloseCardInvoke();
+            GameManager.instance.secondcard = null;
+        }
         // 현재 활성화된 카드만 필터링
         List<Card> visibleCards = allCards.FindAll(c => c.gameObject.activeInHierarchy);
         if (visibleCards.Count <= 1) return;
