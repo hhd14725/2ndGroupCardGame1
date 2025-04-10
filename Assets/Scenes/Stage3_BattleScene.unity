@@ -991,8 +991,16 @@ MonoBehaviour:
   firstcard: {fileID: 0}
   secondcard: {fileID: 0}
   cardCount: 0
+  shuffleImage: {fileID: 0}
   endPanel: {fileID: 1410907862}
   clip: {fileID: 8300000, guid: a3ba46a2d9b05454d8692f0ed75304d3, type: 3}
+  cards: {fileID: 0}
+  board: {fileID: 0}
+  canvas: {fileID: 0}
+  plus: {fileID: 0}
+  minus: {fileID: 0}
+  plusText: {fileID: 0}
+  minusText: {fileID: 0}
 --- !u!82 &804614924
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1526,6 +1534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Card: {fileID: 9153167680202708457, guid: 198115f85d0e82e4cb917f757d3cde04, type: 3}
+  randomArr: 
 --- !u!4 &1694668736
 Transform:
   m_ObjectHideFlags: 0
@@ -1573,6 +1582,7 @@ MonoBehaviour:
   gameManager: {fileID: 804614923}
   time: 30
   Timetxt: {fileID: 1690443072}
+  passedTime: 0
 --- !u!4 &2041172526
 Transform:
   m_ObjectHideFlags: 0
