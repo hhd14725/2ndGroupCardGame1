@@ -4,13 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Threading;
+using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
-    public static TimeManager Instance; //½Ì±ÛÅæ
+    public static TimeManager Instance { get; private set; } //½Ì±ÛÅæ
     public GameManager gameManager;
     public float time = 30.0f;
     public Text Timetxt;
+
+    public float passedTime = 0.0f;
 
     private void Awake()
     {
@@ -45,5 +48,30 @@ public class TimeManager : MonoBehaviour
 
             Timetxt.text = time.ToString("N2");
         }
+
+        passedTime += Time.deltaTime;
+        if (Card.instance.type == 4)
+        {
+            if (passedTime >= 5.0f)
+            {
+                passedTime = 0.0f;
+                GameManager.instance.Shuffle();
+                Debug.Log("¼ÅÇÃ");
+            }
+        }
+    }
+
+    public void plusTime()
+    {
+        time += 2.0f;
+        GameManager.instance.plusText = Instantiate(GameManager.instance.plus, GameManager.instance.canvas.transform);
+        Destroy(GameManager.instance.plusText.gameObject, 1f);
+    }
+
+    public void minusTime()
+    {
+        time -= 2.0f;
+        GameManager.instance.minusText = Instantiate(GameManager.instance.minus, GameManager.instance.canvas.transform);
+        Destroy(GameManager.instance.minusText.gameObject, 1f);
     }
 }

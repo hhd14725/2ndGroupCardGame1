@@ -3,8 +3,12 @@ using System.Linq;
 
 public class Board : MonoBehaviour
 {
+    public static Board Instance;
+
     public GameObject Card;
-   
+
+    public int[] randomArr;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

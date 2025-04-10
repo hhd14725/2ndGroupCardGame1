@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using static UnityEngine.ParticleSystem;
+using Unity.Collections.LowLevel.Unsafe;
 
 // 변수, 메서드용도 주석처리로 설명했습니다. 작업전 체크해주세요.
 public class GameManager : MonoBehaviour
@@ -14,8 +16,8 @@ public class GameManager : MonoBehaviour
     public Card firstcard;
     public Card secondcard;
     public int cardCount = 0;
-    public GameObject retryimage; 
-
+    public GameObject retryimage;
+    public GameObject shuffleImage;
 
     AudioSource audioSource;
     public AudioClip clip;
@@ -23,6 +25,20 @@ public class GameManager : MonoBehaviour
     //private float lastReshuffleTime = 0f; // 스테이지3 (type==2) 용 변수, 리셔플용 시간 체크 변수 , 리셔플 구버전
 
     //public bool isSuffling = false;  // 리셔플 구버전
+
+    public GameObject cards;
+    public Transform board;
+    int[] shuffleArr = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 }; // 섞일 이미지의 번호가 들어갈 배열
+    int matchedIdx; // shuffleArr 배열에서 맞춘 카드의 이미지 번호
+    int match = 8; // 전체 카드 쌍의 개수
+    int matchCount = 0; // 맞춘 카드 쌍의 개수
+    int[] matchedArr; // 맞춘 카드의 이미지 번호를 저장할 배열
+
+    public Transform canvas;
+    public Text plus;
+    public Text minus;
+    public Text plusText;
+    public Text minusText;
 
     private void Awake()
     {
@@ -39,20 +55,29 @@ public class GameManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         Time.timeScale = 0.0f;
-      //lastReshuffleTime = 0f;//구버전 셔플
+        //lastReshuffleTime = 0f;//구버전 셔플
+
+        // 맞춘 카드의 이미지 번호를 저장할 배열 선언
+        matchedArr = new int[match];
+        // 배열을 만들면 기본적으로 숫자 0이 들어있어 나중에 카드의 이미지 번호와 비교할 때 문제가 없도록 모든 숫자를 -1로 교체
+        for (int i = 0; i < matchedArr.Length; i++)
+        {
+            matchedArr[i] = -1;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-       // if (Time.timeScale != 0.0f) // 리셔플 구버전
-       // {
-           // if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
-            //{
-                //StartCoroutine(ReshuffleRoutine());
-                //lastReshuffleTime = TimeManager.Instance.time;
-           // }
-       // }
+        // if (Time.timeScale != 0.0f) // 리셔플 구버전
+        // {
+        // if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
+        //{
+        //StartCoroutine(ReshuffleRoutine());
+        //lastReshuffleTime = TimeManager.Instance.time;
+        // }
+        // }
+
     }
 
     public void Matched()
@@ -84,6 +109,21 @@ public class GameManager : MonoBehaviour
                 secondcard.DestroyCard();
                
             }
+            else if (Card.instance.type == 4) // 스테이지5(type==4)용
+            {
+                TimeManager.Instance.plusTime();
+                plusText = Instantiate(plus, canvas.transform);
+                Destroy(plusText.gameObject, 1f);
+
+                matchedIdx = firstcard.GetComponent<Card>().cardIndex;
+
+                matchedArr[matchCount] = matchedIdx;
+                Debug.Log(matchedArr[matchCount]);
+                matchCount++;
+
+                firstcard.DestroyCard();
+                secondcard.DestroyCard();
+            }
             else
             {
                 firstcard.DestroyCard();
@@ -114,11 +154,19 @@ public class GameManager : MonoBehaviour
                 
 
             }
+            else if (Card.instance.type == 4)
+            {
+                TimeManager.Instance.minusTime();
+                minusText = Instantiate(minus, canvas.transform);
+                Destroy(minusText.gameObject, 1f);
+
+                firstcard.CloseCard();
+                secondcard.CloseCard();
+            }
             else
             {
                 firstcard.CloseCard();
                 secondcard.CloseCard();
-                
             }
             
            
@@ -166,24 +214,75 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void Shuffle()
+    {
+        shuffleArr = shuffleArr.OrderBy(x => Random.Range(0.0f, 7.0f)).ToArray();
+
+        shuffleImage.SetActive(true);
+        Invoke("disableShuffleImage", 0.5f);
+
+        foreach (Transform card in board)
+        {
+            Destroy(card.gameObject);
+        }
+
+        for (int i = 0; i < shuffleArr.Length; i++)
+        {
+            int num = shuffleArr[i];
+
+            // 이미 맞춘 카드라면 건너뛰기
+            bool isMatched = false;
+            for (int j = 0; j < matchedArr.Length; j++)
+            {
+                if (num == matchedArr[j])
+                {
+                    isMatched = true;
+                    break;
+                }
+            }
+
+            if (isMatched)
+            {
+                continue; // 다음 카드로 넘어감
+            }
+
+            GameObject go = Instantiate(cards, board.transform);
+
+            float x = (i % 4) * 1.4f - 2.1f;
+            float y = (i / 4) * 1.4f - 3.6f;
+            go.transform.position = new Vector2(x, y);
+
+            go.GetComponent<Card>().Setting(shuffleArr[i]);
+        }
+
+        firstcard = null; // 첫번째 카드 초기화
+        secondcard = null; // 두번째 카드 초기화
+        Debug.Log("셔플됨");
+    }
+
+    void disableShuffleImage()
+    {
+        shuffleImage.SetActive(false);
+    }
 
 
 
-   // private IEnumerator ReshuffleRoutine() // 스테이지3(type==2) 리셔플 코루틴 구버전 셔플
-   // {
-   //     if (firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
-   //    {
-   //         firstcard.CloseCardInvoke();
-   //         firstcard = null;
-   //     }
-   //     if (secondcard != null)
-   //     {
-   //         secondcard.CloseCardInvoke();
-   //         secondcard = null;
-   //     }
 
-        //if (shuffleMessageUI != null)
-        //shuffleMessageUI.SetActive(true);
+    // private IEnumerator ReshuffleRoutine() // 스테이지3(type==2) 리셔플 코루틴 구버전 셔플
+    // {
+    //     if (firstcard != null) // 셔플전에 첫번째 카드를 고르고 셔플이되어버렸을때, 고른카드가 열려있어서 매치시키면 하나만 삭제됌 수정
+    //    {
+    //         firstcard.CloseCardInvoke();
+    //         firstcard = null;
+    //     }
+    //     if (secondcard != null)
+    //     {
+    //         secondcard.CloseCardInvoke();
+    //         secondcard = null;
+    //     }
+
+    //if (shuffleMessageUI != null)
+    //shuffleMessageUI.SetActive(true);
 
     //    isSuffling = true;
     //    Card[] allCards = Object.FindObjectsByType<Card>(FindObjectsSortMode.None); // allCards는 현재씬에있는 모든 Card 타입을 찾아서 배열로 반환
@@ -203,16 +302,16 @@ public class GameManager : MonoBehaviour
 
     //    yield return new WaitForSeconds(0.01f);
 
-            
+
     //    List<Vector2> availablePositions = new List<Vector2>();
     //    foreach (Card card in remainingCards)
     //    {
-           
+
     //        Vector2 pos = new Vector2((card.slotIndex % 4) * 1.4f - 2.1f,
     //                                  (card.slotIndex / 4) * 1.4f - 3.6f);
     //        availablePositions.Add(pos);
     //    }
-   
+
     //  availablePositions = availablePositions.OrderBy(p => Random.value).ToList();
 
     //    for (int i = 0; i < remainingCards.Length; i++)
@@ -232,11 +331,11 @@ public class GameManager : MonoBehaviour
     //          card.CloseCardInvoke();
     //  }
 
-        //if (shuffleMessageUI != null)
-        // shuffleMessageUI.SetActive(false);
+    //if (shuffleMessageUI != null)
+    // shuffleMessageUI.SetActive(false);
     //  isSuffling = false;
 
     //  yield break;
-  //}
+    //}
 
 }
