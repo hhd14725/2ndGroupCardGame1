@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
-    public static TimeManager Instance { get; private set; } //싱글톤
+    public static TimeManager Instance; //싱글톤
     public GameManager gameManager;
     public float time = 30.0f;
     public Text Timetxt;
@@ -93,14 +93,14 @@ public class TimeManager : MonoBehaviour
 
     }
 
-    public void plusTime()
+    public void plusTime() // 시간 증가 및 화면에 시간 증가 표시
     {
         time += 2.0f;
         GameManager.instance.plusText = Instantiate(GameManager.instance.plus, GameManager.instance.canvas.transform);
         Destroy(GameManager.instance.plusText.gameObject, 1f);
     }
 
-    public void minusTime()
+    public void minusTime() // 시간 감소 및 화면에 시간 감소 표시
     {
         time -= 2.0f;
         GameManager.instance.minusText = Instantiate(GameManager.instance.minus, GameManager.instance.canvas.transform);

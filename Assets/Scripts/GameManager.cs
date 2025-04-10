@@ -34,12 +34,12 @@ public class GameManager : MonoBehaviour
     public GameObject cards;
     public Transform board;
     int[] shuffleArr = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 }; // 섞일 이미지의 번호가 들어갈 배열
-    int matchedIdx; // shuffleArr 배열에서 맞춘 카드의 이미지 번호
+    int matchedIdx; // 맞춘 카드의 이미지 번호
     int match = 8; // 전체 카드 쌍의 개수
     int matchCount = 0; // 맞춘 카드 쌍의 개수
     int[] matchedArr; // 맞춘 카드의 이미지 번호를 저장할 배열
 
-    public Transform canvas;
+    public Transform canvas; // 텍스트 프리팹을 canvas 아래에 생성하기 위한 변수
     public Text plus;
     public Text minus;
     public Text plusText;
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
 
         // 맞춘 카드의 이미지 번호를 저장할 배열 선언
         matchedArr = new int[match];
+
         // 배열을 만들면 기본적으로 숫자 0이 들어있어 나중에 카드의 이미지 번호와 비교할 때 문제가 없도록 모든 숫자를 -1로 교체
         for (int i = 0; i < matchedArr.Length; i++)
         {
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         TurnTxt.text = turn.ToString("N0");
-        if (turn <= 0)
+        if (turn < 0)
         {
             Time.timeScale = 0.0f;
             endPanel.SetActive(true);
@@ -139,13 +140,11 @@ public class GameManager : MonoBehaviour
                 else if (Card.instance.type == 4) // 스테이지5(type==4)용
                 {
                     TimeManager.Instance.plusTime();
-                    plusText = Instantiate(plus, canvas.transform);
-                    Destroy(plusText.gameObject, 1f);
 
-                    matchedIdx = firstcard.GetComponent<Card>().cardIndex;
+                    matchedIdx = firstcard.GetComponent<Card>().cardIndex; // 맞춘 카드의 인덱스 카져오기
 
-                    matchedArr[matchCount] = matchedIdx;
-                    Debug.Log(matchedArr[matchCount]);
+                    // 카드를 맞출 때마다 맞춘 카드의 번호를 배열에 저장
+                    matchedArr[matchCount] = matchedIdx; 
                     matchCount++;
 
                     firstcard.DestroyCard();
@@ -182,8 +181,6 @@ public class GameManager : MonoBehaviour
                 else if (Card.instance.type == 4)
                 {
                     TimeManager.Instance.minusTime();
-                    minusText = Instantiate(minus, canvas.transform);
-                    Destroy(minusText.gameObject, 1f);
 
                     firstcard.CloseCard();
                     secondcard.CloseCard();
@@ -194,6 +191,8 @@ public class GameManager : MonoBehaviour
         {
             if (firstcard.cardIndex + secondcard.cardIndex == 15f)
             {
+                cardCount -= 2;
+
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
 
@@ -258,26 +257,30 @@ public class GameManager : MonoBehaviour
 
     public void Shuffle()
     {
+        // 배열 랜덤 정렬(카드 재배치에 사용할 배열)
         shuffleArr = shuffleArr.OrderBy(x => Random.Range(0.0f, 7.0f)).ToArray();
 
+        // 셔플 이미지 화면에 활성화 후 잠시 뒤 비활성화
         shuffleImage.SetActive(true);
         Invoke("disableShuffleImage", 0.5f);
 
+        // 섞은 카드를 재생성하면 문제가 발생하기에 원래 화면에 있던 카드 제거
         foreach (Transform card in board)
         {
             Destroy(card.gameObject);
         }
 
+        // 맞춘 카드를 제외한 카드들 재배치
         for (int i = 0; i < shuffleArr.Length; i++)
         {
             int num = shuffleArr[i];
 
-            // 이미 맞춘 카드라면 건너뛰기
             bool isMatched = false;
             for (int j = 0; j < matchedArr.Length; j++)
             {
-                if (num == matchedArr[j])
+                if (num == matchedArr[j]) // 맞춘 카드의 이미지 번호와 섞인 배열의 숫자와 비교
                 {
+                    // 이미 맞춘 카드라면 isMatched 값을 참으로 변경
                     isMatched = true;
                     break;
                 }
@@ -299,12 +302,11 @@ public class GameManager : MonoBehaviour
 
         firstcard = null; // 첫번째 카드 초기화
         secondcard = null; // 두번째 카드 초기화
-        Debug.Log("셔플됨");
     }
 
-    void disableShuffleImage()
+    void disableShuffleImage() 
     {
-        shuffleImage.SetActive(false);
+        shuffleImage.SetActive(false); // 셔플 이미지 비활성화
     }
 
     
