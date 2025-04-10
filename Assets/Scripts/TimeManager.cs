@@ -64,7 +64,6 @@ public class TimeManager : MonoBehaviour
             {
                 passedTime = 0.0f;
                 GameManager.instance.Shuffle();
-                Debug.Log("¼ÅÇÃ");
             }
         }
         if (Card.instance.type == 3)
