@@ -920,7 +920,7 @@ MonoBehaviour:
   secondcard: {fileID: 0}
   cardCount: 0
   shuffleImage: {fileID: 382415567}
-  endPanel: {fileID: 0}
+  endPanel: {fileID: 588460198}
   clip: {fileID: 8300000, guid: a3ba46a2d9b05454d8692f0ed75304d3, type: 3}
   cards: {fileID: 9153167680202708457, guid: 21651fa154171eb4a856cf89efd1a13b, type: 3}
   board: {fileID: 1694668736}
