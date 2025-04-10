@@ -8,7 +8,7 @@ using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
-    public static TimeManager Instance { get; private set; } //ΩÃ±€≈Ê
+    public static TimeManager Instance; //ΩÃ±€≈Ê
     public GameManager gameManager;
     public float time = 30.0f;
     public Text Timetxt;

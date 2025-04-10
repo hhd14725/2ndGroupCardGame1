@@ -190,6 +190,7 @@ public class Card : MonoBehaviour
     {
         StartCoroutine(BlindCoroutine());
         front.SetActive(false);
+        anim.SetBool("IsOpen", false);
     }
     public void ForceOpen()
     {
