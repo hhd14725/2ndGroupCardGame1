@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     public GameObject shuffleImage;
     public GameObject endPanel;
 
+    public Text TurnTxt;
+    public float turn = 300f;
+
 
     AudioSource audioSource;
     public AudioClip clip;
@@ -71,116 +74,127 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (Time.timeScale != 0.0f) // 리셔플 구버전
-        // {
-        // if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
-        //{
-        //StartCoroutine(ReshuffleRoutine());
-        //lastReshuffleTime = TimeManager.Instance.time;
-        // }
-        // }
+        TurnTxt.text = turn.ToString("N0");
+        if (turn <= 0)
+        {
+            Time.timeScale = 0.0f;
+            endPanel.SetActive(true);
 
+            // if (Time.timeScale != 0.0f) // 리셔플 구버전
+            // {
+            // if (TimeManager.Instance.time - lastReshuffleTime > 5f && cardCount > 0) // 5초 넘어갈때마다 체크후 리셔플 코루틴 실시
+            //{
+            //StartCoroutine(ReshuffleRoutine());
+            //lastReshuffleTime = TimeManager.Instance.time;
+            // }
+            // }
+
+        }
     }
 
     public void Matched()
     {
-        if (firstcard.cardIndex == secondcard.cardIndex)
+        if (Card.instance.type != 1)//카드타입이 1이 아닐경우
         {
-            //firstcard.DestroyCard(); //안써서 주석처리
-            //secondcard.DestroyCard();
-            cardCount -= 2;
-            if (Card.instance.type == 0) // 스테이지1(type==0)용
+            if (firstcard.cardIndex == secondcard.cardIndex)
             {
-                float bonusDelay = matchPairCount * 0.5f; // 짝맞추기가 1회 성공할때마다 보너스 딜레이가 0.5초씩 증가해서 난이도 완화
-                float bonusDelay2 = matchPairCount * 0.5f;
-                firstcard.StartTurnBackCorutine(bonusDelay);
-                secondcard.StartTurnBackCorutine(bonusDelay);
-                CardFront front1 = firstcard.GetComponentInChildren<CardFront>(); //CardFront 는 Card에 있는 자식 오브젝트, CardFront.cs로 관리
-                CardFront front2 = secondcard.GetComponentInChildren<CardFront>();
-                if (front1 != null)
-                    front1.StartTremBleFrontCard(bonusDelay2);
-                if (front2 != null)
-                    front2.StartTremBleFrontCard(bonusDelay2);
+                //firstcard.DestroyCard(); //안써서 주석처리
+                //secondcard.DestroyCard();
+                cardCount -= 2;
+                if (Card.instance.type == 0) // 스테이지1(type==0)용
+                {
+                    float bonusDelay = matchPairCount * 0.5f; // 짝맞추기가 1회 성공할때마다 보너스 딜레이가 0.5초씩 증가해서 난이도 완화
+                    float bonusDelay2 = matchPairCount * 0.5f;
+                    firstcard.StartTurnBackCorutine(bonusDelay);
+                    secondcard.StartTurnBackCorutine(bonusDelay);
+                    CardFront front1 = firstcard.GetComponentInChildren<CardFront>(); //CardFront 는 Card에 있는 자식 오브젝트, CardFront.cs로 관리
+                    CardFront front2 = secondcard.GetComponentInChildren<CardFront>();
+                    if (front1 != null)
+                        front1.StartTremBleFrontCard(bonusDelay2);
+                    if (front2 != null)
+                        front2.StartTremBleFrontCard(bonusDelay2);
 
-                Invoke("RestoreCardCount", 10.0f + bonusDelay);
-                matchPairCount++;
+                    Invoke("RestoreCardCount", 10.0f + bonusDelay);
+                    matchPairCount++;
+                }
+
+                else if (Card.instance.type == 2) //스테이지3(type==3)용
+                {
+                    firstcard.DestroyCard();
+                    secondcard.DestroyCard();
+                }
+                else if (Card.instance.type == 4) // 스테이지5(type==4)용
+                {
+                    TimeManager.Instance.plusTime();
+                    plusText = Instantiate(plus, canvas.transform);
+                    Destroy(plusText.gameObject, 1f);
+
+                    matchedIdx = firstcard.GetComponent<Card>().cardIndex;
+
+                    matchedArr[matchCount] = matchedIdx;
+                    Debug.Log(matchedArr[matchCount]);
+                    matchCount++;
+
+                    firstcard.DestroyCard();
+                    secondcard.DestroyCard();
+                }
+                else
+                {
+                    firstcard.DestroyCard();
+                    secondcard.DestroyCard();
+
+                 
+                }
+                audioSource.PlayOneShot(clip);
             }
-            else if (Card.instance.type == 1) // 스테이지2(type==1)용
+            else // 짝 못맞췄을경우
+            {
+                if (Card.instance.type == 0)
+                {
+                    firstcard.CloseCard();
+                    secondcard.CloseCard();
+                }
+
+
+                else if (Card.instance.type == 2)
+                {
+                    firstcard.CloseCard();
+                    secondcard.BlindCard();
+                }
+                else if (Card.instance.type == 4)
+                {
+                    TimeManager.Instance.minusTime();
+                    minusText = Instantiate(minus, canvas.transform);
+                    Destroy(minusText.gameObject, 1f);
+
+                    firstcard.CloseCard();
+                    secondcard.CloseCard();
+                }
+            }
+        }
+        else // 카드타입이 1일경우
+        {
+            if (firstcard.cardIndex + secondcard.cardIndex == 15f)
             {
                 firstcard.DestroyCard();
                 secondcard.DestroyCard();
 
-            }
-            else if (Card.instance.type == 2) //스테이지3(type==3)용
-            {
-                firstcard.DestroyCard();
-                secondcard.DestroyCard();
-            }
-            else if (Card.instance.type == 4) // 스테이지5(type==4)용
-            {
-                TimeManager.Instance.plusTime();
-                plusText = Instantiate(plus, canvas.transform);
-                Destroy(plusText.gameObject, 1f);
-
-                matchedIdx = firstcard.GetComponent<Card>().cardIndex;
-
-                matchedArr[matchCount] = matchedIdx;
-                Debug.Log(matchedArr[matchCount]);
-                matchCount++;
-
-                firstcard.DestroyCard();
-                secondcard.DestroyCard();
+                audioSource.PlayOneShot(clip);
             }
             else
             {
-                firstcard.DestroyCard();
-                secondcard.DestroyCard();
+                firstcard.CloseCard();
+                secondcard.CloseCard();
             }
-
-            if (cardCount == 0) // 카드 카운트가 0이 되어버리면, 게임클리어창으로 보냄
-            {
-                StageResult();
-            }
-            audioSource.PlayOneShot(clip);
-
-
 
         }
-        else // 짝 못맞췄을경우
+
+        if (cardCount == 0) // 카드 카운트가 0이 되어버리면, 게임클리어창으로 보냄
         {
-            if (Card.instance.type == 0)
-            {
-                firstcard.CloseCard();
-                secondcard.CloseCard();
-            }
-
-            else if (Card.instance.type == 1)
-            {
-                firstcard.CloseCard();
-                secondcard.CloseCard();
-            }
-            else if (Card.instance.type == 2)
-            {
-                firstcard.CloseCard();
-                secondcard.BlindCard();
-            }
-            else if (Card.instance.type == 4)
-            {
-                TimeManager.Instance.minusTime();
-                minusText = Instantiate(minus, canvas.transform);
-                Destroy(minusText.gameObject, 1f);
-
-                firstcard.CloseCard();
-                secondcard.CloseCard();
-            }
-            else
-            {
-                firstcard.CloseCard();
-                secondcard.CloseCard();
-            }
-
-
+            StageResult();
         }
+        
+
         firstcard = null; // 첫번째 카드 초기화
         secondcard = null; // 두번째 카드 초기화
     }

@@ -55,7 +55,10 @@ public class Card : MonoBehaviour
         else if(type == 1)
         {
             cardIndex = number;
-            frontimage.sprite = Resources.Load<Sprite>($"Kyo{cardIndex}");
+            frontimage.sprite = Resources.Load<Sprite>($"chang{cardIndex}");
+
+            GameManager.instance.turn -= 17.5f;
+            TimeManager.Instance.time += 50f;
         }
         else if (type == 2)
         {
@@ -65,7 +68,7 @@ public class Card : MonoBehaviour
         else if (type == 3)
         {
             cardIndex = number;
-            frontimage.sprite = Resources.Load<Sprite>($"Chang{cardIndex}");
+            frontimage.sprite = Resources.Load<Sprite>($"Kyo{cardIndex}");
         }
         else
         {
@@ -96,6 +99,8 @@ public class Card : MonoBehaviour
 
             audioSource.PlayOneShot(clip);
             anim.SetBool("IsOpen", true);
+
+            GameManager.instance.turn -= 0.5f;
 
             front.SetActive(true);
             back.SetActive(false);
