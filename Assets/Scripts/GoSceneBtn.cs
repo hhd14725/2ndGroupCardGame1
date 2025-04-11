@@ -34,7 +34,13 @@ public class GoSceneBtn : MonoBehaviour
 
     public void ResulttoMain()
     {
-       
+        if (Card.instance == null)
+        {
+            SceneManager.LoadScene("MainScene");
+            return;
+        }
+
+
         if (Card.instance.type==0)
         {
          SceneManager.LoadScene("MainScene");

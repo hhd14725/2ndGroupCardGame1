@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using static UnityEngine.ParticleSystem;
-using Unity.Collections.LowLevel.Unsafe;
+//using static UnityEngine.ParticleSystem;
+//using Unity.Collections.LowLevel.Unsafe;
 
 // 변수, 메서드용도 주석처리로 설명했습니다. 작업전 체크해주세요.
 public class GameManager : MonoBehaviour

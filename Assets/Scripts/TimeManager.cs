@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Threading;
-using UnityEditor;
+//using System.Threading;
+//using UnityEditor;
 
 public class TimeManager : MonoBehaviour
 {
