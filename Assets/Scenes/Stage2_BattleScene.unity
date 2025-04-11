@@ -605,6 +605,7 @@ MonoBehaviour:
   time: 30
   Timetxt: {fileID: 1690443072}
   passedTime: 0
+  shuffleInterval: 5
   shiftInterval: 5
   restoreInterval: 20
 --- !u!4 &719183052
@@ -1048,8 +1049,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.3
-  m_Text: "- \uCE74\uB4DC\uC57C, \uBC18\uC73C\uB85C \uAC08\uB77C\uC838\uC11C \uC8FD\uC5B4.
-    -"
+  m_Text: "- \uCE74\uB4DC\uAC00 \uBC18\uC73C\uB85C \uCC22\uC5B4\uC84C\uB2E4. -"
 --- !u!222 &977997690
 CanvasRenderer:
   m_ObjectHideFlags: 0
