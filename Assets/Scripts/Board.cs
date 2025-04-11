@@ -31,7 +31,7 @@ public class Board : MonoBehaviour
 
                 Go.transform.position = new Vector2(x, y);
                 Go.GetComponent<Card>().Setting(arr1[i]);
-                Go.GetComponent<Card>().slotIndex = i;
+              //  Go.GetComponent<Card>().slotIndex = i;
             }
 
 
@@ -51,7 +51,7 @@ public class Board : MonoBehaviour
 
                 Go.transform.position = new Vector2(x, y);
                 Go.GetComponent<Card>().Setting(arr[i]);
-                Go.GetComponent<Card>().slotIndex = i;
+              //  Go.GetComponent<Card>().slotIndex = i;
 
                 Board.allCards.Add(Go.GetComponent<Card>());
             }

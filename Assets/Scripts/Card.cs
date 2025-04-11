@@ -8,7 +8,7 @@ public class Card : MonoBehaviour
     public static Card instance;
     public GameObject front;
     public GameObject back;
-    public GameObject blind;
+    public GameObject blind; // stage3 변수, 두번째 카드는 깠을때 틀리면 안알려줌
     public Animator anim;
     public int slotIndex; // stage3(type==2)의 보드에서 할당된 고유 슬롯 인덱스 (0 ~ 15), 리셔플때 남은 카드 위치 확인용
 
