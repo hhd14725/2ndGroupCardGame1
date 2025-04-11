@@ -1479,6 +1479,7 @@ MonoBehaviour:
   time: 30
   Timetxt: {fileID: 1690443072}
   passedTime: 0
+  shuffleInterval: 10
   shiftInterval: 5
   restoreInterval: 20
 --- !u!4 &1679043413

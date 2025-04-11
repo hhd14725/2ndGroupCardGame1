@@ -14,6 +14,7 @@ public class TimeManager : MonoBehaviour
     public Text Timetxt;
 
     public float passedTime = 0.0f;
+    public float shuffleInterval = 5.0f;
     public float shiftInterval = 5f;  // 카드 이동 간격 스테이지4
     private float shiftTimer;         // 카드 이동 타이머 스테이지4
 
@@ -60,7 +61,7 @@ public class TimeManager : MonoBehaviour
         passedTime += Time.deltaTime;
         if (Card.instance.type == 4)
         {
-            if (passedTime >= 5.0f)
+            if (passedTime >= shuffleInterval)
             {
                 passedTime = 0.0f;
                 GameManager.instance.Shuffle();
