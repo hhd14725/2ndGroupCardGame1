@@ -220,7 +220,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 78337521}
         m_TargetAssemblyTypeName: GoSceneBtn, Assembly-CSharp
-        m_MethodName: GoStagin1
+        m_MethodName: GoStagin4
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -962,7 +962,7 @@ MonoBehaviour:
   secondcard: {fileID: 0}
   cardCount: 0
   shuffleImage: {fileID: 0}
-  endPanel: {fileID: 0}
+  endPanel: {fileID: 413413148}
   TurnTxt: {fileID: 1817687862}
   turn: 300
   clip: {fileID: 8300000, guid: a3ba46a2d9b05454d8692f0ed75304d3, type: 3}

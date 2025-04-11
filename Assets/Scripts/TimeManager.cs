@@ -69,11 +69,7 @@ public class TimeManager : MonoBehaviour
         if (Card.instance.type == 3)
         {
            
-            if (time <= 0f)
-            {
-                time = 0f;
-               // RestoreAllCards(); // 전체 초기화
-            }
+      
             shiftTimer -= Time.deltaTime;
             // 정해진 시간마다 카드 위치 이동
             if (shiftTimer <= 0f)
